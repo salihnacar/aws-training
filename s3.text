@@ -1,0 +1,30 @@
+# to create a  basic s3 bucket
+
+ aws s3api create-bucket --bucket created-by-cli-bucket --region  eu-north-1  --create-bucket-configuration LocationConstraint=eu-north-1
+
+ # show existed buckets
+
+ aws s3 ls
+
+ # turn on the public access  block
+
+ aws s3api put-public-access-block \
+    --bucket my-bucket \
+    --public-access-block-configuration "BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true"
+
+
+# delete the public access block 
+
+
+aws s3api  delete-public-access-block --bucket  created-by-cli-bucket  
+
+
+# put public access for the objects 
+aws s3api  put-object-acl  --bucket created-by-cli-bucket  --key dummy.txt --acl public-read
+
+# delete object 
+aws s3api delete-object  --bucket created-by-cli-bucket --key  dummy.txt
+
+# delet a bucket 
+
+aws s3api delete-bucket --bucket  created-by-cli-bucket  --region eu-north-1
