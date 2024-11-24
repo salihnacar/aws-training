@@ -1,0 +1,33 @@
+{"Version": "2012-10-17",
+    "Id": "Allow static IP access",
+    "Statement": [
+        {
+            "Sid": "IPAllow",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::created-by-cli-bucket-2/*"
+            ],
+            "Condition": {
+                "IpAddress": {
+                    "aws:SourceIp": "214.14.92.197"
+                }
+            }
+        },
+        {
+            "Sid" : "Allow only GET request Originated from   example.com to access this resoure  ",
+            "Effect" : "Allow",
+            "Principal" : "*",
+            "Action" : ["s3:GetObject"],
+            "Resource":"arn:aws:s3:::created-by-cli-bucket-2/*.jpg",
+            "Condition" :{ 
+                "StringLike":{"aws:Referer" :["https://example.com/*"]}
+            }
+
+
+        }
+    ]
+    
+}
+
