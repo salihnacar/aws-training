@@ -1,0 +1,35 @@
+Amazon Machine Image  =  ubuntu  = ami-0866a3c8686eaeeba
+
+# how to create a pair key
+
+aws ec2 create-key-pair --key-name  devops-test-key-01  --key-format ppk  --query 'keyMaterial' --output text > devops-test-key-01.ppk
+
+# the ppk format to work with the putty  on windows
+# the query arg is universal arg in aws  used to filter the returned json file 
+# and extract the desired key value 
+
+
+# creating security group  
+aws create-security-group --group-name  devops-sg-01 --description 'created from cli '  --query 'GroupId'
+
+# add rule 
+aws  ec2  authorize-security-group-ingress --group-id  sg-00a2b9595f48d02e0 --protocol  tcp --port 22 --cidr   213.14.92.197/32
+aws  ec2  authorize-security-group-ingress --group-id  sg-00a2b9595f48d02e0 --protocol  tcp --port 80 --cidr   213.14.92.197/32
+
+# creating ec2 instance 
+aws ec2  run-instances  \
+    --image-id  ami-0932ffb346ea84d48 \
+    --count 1 \
+    --instance-type t2.micro \
+    --key-name devops-test-key-01 \
+    --region us-east-1 \
+    --security-group-ids sg-00a2b9595f48d02e0 
+
+# terminating instances 
+aws ec2 terminate-instances --instance-ids  i-04072f6f0ad98b098
+
+
+# here is how to test the IOPS and BW 
+ sudo  fio --name=write_iops --size=4G --time_based --runtime=60s --ramp_time=2s --ioengine=libaio --direct=1 --verify=0 --bs=1M --iodepth=256 --rw=randwrite --group_reporting=1 --iodepth_batch_submit=256 --iodepth_batch_complete_max=256
+  sudo  fio --name=write_iops --size=4G --time_based --runtime=60s --ramp_time=2s --ioengine=libaio --direct=1 --verify=0 --bs=16k --iodepth=256 --rw=randwrite --group_reporting=1 --iodepth_batch_submit=256 --iodepth_batch_complete_max=256
+
