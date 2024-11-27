@@ -33,3 +33,10 @@ aws ec2 terminate-instances --instance-ids  i-04072f6f0ad98b098
  sudo  fio --name=write_iops --size=4G --time_based --runtime=60s --ramp_time=2s --ioengine=libaio --direct=1 --verify=0 --bs=1M --iodepth=256 --rw=randwrite --group_reporting=1 --iodepth_batch_submit=256 --iodepth_batch_complete_max=256
   sudo  fio --name=write_iops --size=4G --time_based --runtime=60s --ramp_time=2s --ioengine=libaio --direct=1 --verify=0 --bs=16k --iodepth=256 --rw=randwrite --group_reporting=1 --iodepth_batch_submit=256 --iodepth_batch_complete_max=256
 
+
+# here is code to create and attach  a volume to  a ec2 instance 
+aws ec2  create-volume  --volume-type io2  --size 12  --iops 6000  availability-zone us-east-1d
+aws ec2  attach-volume --volume-id vol-096d068082a103ce6 --instance-id  i-021fc8f875e10272f  --device  /dev/sdf 
+
+# deleting a volume 
+aws ec2 delete-volume --volume-id  <volume-id>
